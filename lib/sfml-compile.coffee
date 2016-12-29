@@ -65,8 +65,6 @@ module.exports = SfmlCompile =
     deleteDatBatM8 = "\ndel "+justDie+"\\compile.bat"
     if atom.config.get("sfml-compile.deleteBat") == false
       deleteDatBatM8 = "\nREM DO IT! COME ON! KILL ME NOW! I'M HERE!"
-    # atom.config.get("sfml-compile.regularFiles.sameAsMain")
-    # "c:\\Users\\adam6\\Desktop\\Adam\\Atom_Cpp\\Ostasz_Kombat"
 
     someStuff = "@RD /S /Q \""+justDie+"\\build"+"\"\n"+"mkdir "+justDie+"\\build\n"+"cd "+justDie+"\n"+"g++ -Wall -g -IC:\\SFML\\include -c \""+justDie+"\\main.cpp\""+" -o build\\main.o\n"+"g++ -LC:\\SFML\\lib -o \"build\\main.exe\" build\\main.o   -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network\n"+"xcopy /s "+dllFiles+"*.dll "+justDie+"\\build\n"+"copy "+resourceFiles+"\\*.png "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.ttf "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.mp3 "+justDie+"\\build\n"+"cd "+justDie+"\\build\n"+"main.exe"+deleteDatBatM8
 

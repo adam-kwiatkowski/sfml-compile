@@ -1,0 +1,22 @@
+# See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
+'context-menu':
+  'atom-text-editor': [
+    {
+      'label': 'Compile SFML'
+      'command': 'sfml-compile:toggle'
+    }
+  ]
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'sfml-compile'
+      'submenu': [
+        {
+          'label': 'Compile'
+          'command': 'sfml-compile:toggle'
+        }
+      ]
+    ]
+  }
+]

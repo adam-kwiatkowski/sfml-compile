@@ -1,10 +1,9 @@
 {
   "name": "sfml-compile",
   "main": "./lib/sfml-compile",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Can be used to compile SFML stuff on windows",
-  "keywords": [
-  ],
+  "keywords": [],
   "activationCommands": {
     "atom-workspace": "sfml-compile:toggle"
   },
@@ -13,6 +12,5 @@
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

@@ -2,4 +2,4 @@
 
 Can be used to compile SFML stuff on windows
 
-To use this package you must put compile-sfml.exe in SysWOW64 directory. You can also compile it yourself from compile-sfml.cpp
+To use this package you must include MinGW/bin in system PATH (you should be able to execute 'g++ --version' command) and download SFML

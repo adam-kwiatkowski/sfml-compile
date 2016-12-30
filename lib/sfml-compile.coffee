@@ -28,6 +28,14 @@ module.exports = SfmlCompile =
       title: 'Delete compile.bat after compilation'
       type: 'boolean'
       default: true
+    createLog:
+      title: 'Create compiling_error.txt after unsuccesful compilation'
+      type: 'boolean'
+      default: true
+    sfmlLocation:
+      title: 'Location of SFML\\include'
+      type: 'string'
+      default: 'C:\\SFML\\include'
 
   activate: (state) ->
     @sfmlCompileView = new SfmlCompileView(state.sfmlCompileViewState)
@@ -55,24 +63,28 @@ module.exports = SfmlCompile =
 
     fs = require "fs"
 
-    command = "compile_sfml.exe"
+    command = "compile.bat"
     justDie = atom.project.getPaths()[0]
     args = [justDie]
+    doLog = " 2> compiling_error.txt"
     resourceFiles = atom.config.get("sfml-compile.regularFiles.resourcesDir")
     if atom.config.get("sfml-compile.regularFiles.sameAsMain") == true
       resourceFiles = justDie
     dllFiles = atom.config.get("sfml-compile.regularFiles.dllsDir")
-    deleteDatBatM8 = "\ndel "+justDie+"\\compile.bat"
+    deleteDatBatM8 = "\nREM DO IT! COME ON! KILL ME NOW! I'M HERE!\ndel "+justDie+"\\compile.bat"
     if atom.config.get("sfml-compile.deleteBat") == false
-      deleteDatBatM8 = "\nREM DO IT! COME ON! KILL ME NOW! I'M HERE!"
+      deleteDatBatM8 = ""
+    if atom.config.get("sfml-compile.createLog") == false
+      doLog = ""
 
-    someStuff = "@RD /S /Q \""+justDie+"\\build"+"\"\n"+"mkdir "+justDie+"\\build\n"+"cd "+justDie+"\n"+"g++ -Wall -g -IC:\\SFML\\include -c \""+justDie+"\\main.cpp\""+" -o build\\main.o\n"+"g++ -LC:\\SFML\\lib -o \"build\\main.exe\" build\\main.o   -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network\n"+"xcopy /s "+dllFiles+"*.dll "+justDie+"\\build\n"+"copy "+resourceFiles+"\\*.png "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.ttf "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.mp3 "+justDie+"\\build\n"+"cd "+justDie+"\\build\n"+"main.exe"+deleteDatBatM8
+    # Kill me, please
+    someStuff = "@RD /S /Q \""+justDie+"\\build"+"\"\n"+"mkdir "+justDie+"\\build\n"+"cd "+justDie+"\n"+"g++ -Wall -g -I"+atom.config.get("sfml-compile.sfmlLocation")+" -c \""+justDie+"\\main.cpp\""+" -o build\\main.o"+doLog+"\n"+"findstr \"^\" \"compiling_error.txt\" || del \"compiling_error.txt\"\n"+"g++ -LC:\\SFML\\lib -o \"build\\main.exe\" build\\main.o   -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network\n"+"xcopy /s "+dllFiles+"*.dll "+justDie+"\\build\n"+"copy "+resourceFiles+"\\*.png "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.ttf "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.mp3 "+justDie+"\\build\n"+"cd "+justDie+"\\build\n"+"main.exe"+deleteDatBatM8
 
     fs.writeFile atom.project.getPaths()[0]+"\\compile.bat", someStuff
 
     # Default to where the user opened atom
     options =
-      cwd: atom.project.getPaths()[0]
+      cwd: atom.project.getPaths()[0]+"\\"
       env: process.env
 
     stdout = (output) -> console.log(output)
@@ -86,3 +98,9 @@ module.exports = SfmlCompile =
 
     # Run process
     new BufferedProcess({command, args, options, stdout, stderr, exit})
+
+    setTimeout ->
+      fs.exists justDie+"\\compiling_error.txt", (exists) ->
+        log = fs.readFileSync justDie+'\\compiling_error.txt', 'utf8'
+        atom.notifications.addError(log)
+    , 1000

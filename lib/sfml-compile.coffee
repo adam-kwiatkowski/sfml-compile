@@ -32,6 +32,11 @@ module.exports = SfmlCompile =
       title: 'Create compiling_error.txt after unsuccesful compilation'
       type: 'boolean'
       default: true
+    hideTerminal:
+      title: 'Get rid of console'
+      description: 'You can see changes if you launch your app manually'
+      type: 'boolean'
+      default: true
     sfmlLocation:
       title: 'Location of SFML\\include'
       type: 'string'
@@ -76,9 +81,12 @@ module.exports = SfmlCompile =
       deleteDatBatM8 = ""
     if atom.config.get("sfml-compile.createLog") == false
       doLog = ""
+    hideCMD = ""
+    if atom.config.get("sfml-compile.hideTerminal") == true
+      hideCMD = " -mwindows"
 
     # Kill me, please
-    someStuff = "@RD /S /Q \""+justDie+"\\build"+"\"\n"+"mkdir "+justDie+"\\build\n"+"cd "+justDie+"\n"+"g++ -Wall -g -I"+atom.config.get("sfml-compile.sfmlLocation")+" -c \""+justDie+"\\main.cpp\""+" -o build\\main.o"+doLog+"\n"+"findstr \"^\" \"compiling_error.txt\" || del \"compiling_error.txt\"\n"+"g++ -LC:\\SFML\\lib -o \"build\\main.exe\" build\\main.o   -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network\n"+"xcopy /s "+dllFiles+"*.dll "+justDie+"\\build\n"+"copy "+resourceFiles+"\\*.png "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.ttf "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.mp3 "+justDie+"\\build\n"+"cd "+justDie+"\\build\n"+"main.exe"+deleteDatBatM8
+    someStuff = "@RD /S /Q \""+justDie+"\\build"+"\"\n"+"mkdir "+justDie+"\\build\n"+"cd "+justDie+"\n"+"g++ -Wall -g -I"+atom.config.get("sfml-compile.sfmlLocation")+" -c \""+justDie+"\\main.cpp\""+" -o build\\main.o"+doLog+"\n"+"findstr \"^\" \"compiling_error.txt\" || del \"compiling_error.txt\"\n"+"g++ -LC:\\SFML\\lib -o \"build\\main.exe\" build\\main.o   -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network"+hideCMD+"\n"+"xcopy /s "+dllFiles+"*.dll "+justDie+"\\build\n"+"copy "+resourceFiles+"\\*.png "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.ttf "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.mp3 "+justDie+"\\build\n"+"cd "+justDie+"\\build\n"+"main.exe"+deleteDatBatM8
 
     fs.writeFile atom.project.getPaths()[0]+"\\compile.bat", someStuff
 

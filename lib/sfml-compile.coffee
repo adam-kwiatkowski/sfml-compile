@@ -41,6 +41,10 @@ module.exports = SfmlCompile =
       title: 'Location of SFML\\include'
       type: 'string'
       default: 'C:\\SFML\\include'
+    compilerOptions:
+      title: 'Compiler options'
+      type: 'string'
+      default: ''
 
   activate: (state) ->
     @sfmlCompileView = new SfmlCompileView(state.sfmlCompileViewState)
@@ -86,7 +90,7 @@ module.exports = SfmlCompile =
       hideCMD = " -mwindows"
 
     # Kill me, please
-    someStuff = "@RD /S /Q \""+justDie+"\\build"+"\"\n"+"mkdir "+justDie+"\\build\n"+"cd "+justDie+"\n"+"g++ -Wall -g -I"+atom.config.get("sfml-compile.sfmlLocation")+" -c \""+justDie+"\\main.cpp\""+" -o build\\main.o"+doLog+"\n"+"findstr \"^\" \"compiling_error.txt\" || del \"compiling_error.txt\"\n"+"g++ -LC:\\SFML\\lib -o \"build\\main.exe\" build\\main.o   -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network"+hideCMD+"\n"+"xcopy /s "+dllFiles+"*.dll "+justDie+"\\build\n"+"copy "+resourceFiles+"\\*.png "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.ttf "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.mp3 "+justDie+"\\build\n"+"cd "+justDie+"\\build\n"+"main.exe"+deleteDatBatM8
+    someStuff = "@RD /S /Q \""+justDie+"\\build"+"\"\n"+"mkdir "+justDie+"\\build\n"+"cd "+justDie+"\n"+"g++ -Wall -g "+atom.config.get("sfml-compile.compilerOptions")+" -I"+atom.config.get("sfml-compile.sfmlLocation")+" -c \""+justDie+"\\main.cpp\""+" -o build\\main.o"+doLog+"\n"+"findstr \"^\" \"compiling_error.txt\" || del \"compiling_error.txt\"\n"+"g++ -LC:\\SFML\\lib -o \"build\\main.exe\" build\\main.o   -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network"+hideCMD+"\n"+"xcopy /s "+dllFiles+"*.dll "+justDie+"\\build\n"+"copy "+resourceFiles+"\\*.png "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.ttf "+justDie+"\\build"+"\ncopy "+resourceFiles+"\\*.mp3 "+justDie+"\\build\n"+"cd "+justDie+"\\build\n"+"main.exe"+deleteDatBatM8
 
     fs.writeFile atom.project.getPaths()[0]+"\\compile.bat", someStuff
 

@@ -1,7 +1,7 @@
 {
   "name": "sfml-compile",
   "main": "./lib/sfml-compile",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Can be used to compile SFML stuff on windows",
   "keywords": [],
   "activationCommands": {
